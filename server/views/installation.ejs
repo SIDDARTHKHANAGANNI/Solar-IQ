@@ -1,0 +1,140 @@
+<!-- Installation Setup Form - Partial for index.ejs layout -->
+<div class="form-card rounded-2xl shadow-2xl p-8">
+    <form id="installationForm" class="space-y-8">
+        <!-- Basic System -->
+        <div>
+            <h2 class="text-xl font-semibold text-cyan-300 mb-4 section-title pl-3">⚡ Basic System</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-2">Installed capacity (kWp)</label>
+                    <input type="number" step="0.1" name="capacity" 
+                        class="input-field w-full px-4 py-3 rounded-lg text-white"
+                        placeholder="e.g., 5.0">
+                </div>
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-2">Installation year</label>
+                    <input type="number" name="installYear" min="2000" max="2026"
+                        class="input-field w-full px-4 py-3 rounded-lg text-white"
+                        placeholder="e.g., 2024">
+                </div>
+            </div>
+        </div>
+
+        <!-- Electricity Usage -->
+        <div>
+            <h2 class="text-xl font-semibold text-cyan-300 mb-4 section-title pl-3">⚡ Electricity Usage</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-2">Monthly units consumed (kWh) - Last 12 months</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="number" name="month1" placeholder="Month 1" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month2" placeholder="Month 2" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month3" placeholder="Month 3" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month4" placeholder="Month 4" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month5" placeholder="Month 5" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month6" placeholder="Month 6" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month7" placeholder="Month 7" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month8" placeholder="Month 8" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month9" placeholder="Month 9" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month10" placeholder="Month 10" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month11" placeholder="Month 11" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                        <input type="number" name="month12" placeholder="Month 12" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-300 text-sm font-medium mb-2">Tariff (₹ per unit)</label>
+                    <input type="number" step="0.01" name="tariff"
+                        class="input-field w-full px-4 py-3 rounded-lg text-white"
+                        placeholder="e.g., 6.50">
+                </div>
+            </div>
+        </div>
+
+        <!-- Solar Data -->
+        <div>
+            <h2 class="text-xl font-semibold text-cyan-300 mb-4 section-title pl-3">🌞 Solar Data</h2>
+            <div>
+                <label class="block text-slate-300 text-sm font-medium mb-2">Monthly solar generation (kWh)</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="number" name="solarMonth1" placeholder="Jan" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth2" placeholder="Feb" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth3" placeholder="Mar" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth4" placeholder="Apr" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth5" placeholder="May" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth6" placeholder="Jun" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth7" placeholder="Jul" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth8" placeholder="Aug" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth9" placeholder="Sep" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth10" placeholder="Oct" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth11" placeholder="Nov" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                    <input type="number" name="solarMonth12" placeholder="Dec" class="input-field px-3 py-2 rounded-lg text-white text-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div>
+            <h2 class="text-xl font-semibold text-cyan-300 mb-4 section-title pl-3">🌍 Location</h2>
+            <div>
+                <label class="block text-slate-300 text-sm font-medium mb-2">City</label>
+                <input type="text" name="city"
+                    class="input-field w-full px-4 py-3 rounded-lg text-white"
+                    placeholder="e.g., Bengaluru">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-6">
+            <button type="submit"
+                class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-lg shadow-lg">
+                Save & Continue to Dashboard →
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-card {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(34, 211, 238, 0.2);
+    }
+    .input-field {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(34, 211, 238, 0.3);
+        transition: all 0.3s ease;
+    }
+    .input-field:focus {
+        border-color: #22d3ee;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+        transition: transform 0.2s ease;
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+    }
+    .section-title {
+        border-left: 4px solid #22d3ee;
+    }
+</style>
+
+<script>
+    const form = document.getElementById('installationForm');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Log dummy data (not used anywhere)
+        console.log('Installation data (dummy):', data);
+        
+        // Show success and redirect
+        alert('Installation details saved! (Data is dummy - not stored)');
+        window.location.href = '/';
+    });
+</script>

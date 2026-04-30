@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolarIQ - <%= mode === 'signup' ? 'Sign Up' : 'Sign In' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#020817] text-slate-100">
+  <main class="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,#0f2a4d_0,#020817_42%,#020817_100%)] px-4 py-8">
+    <section class="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-950/80 p-6 shadow-2xl shadow-black/50">
+      <div class="mb-6">
+        <p class="text-sm font-semibold uppercase text-cyan-300">Solar Intelligence Platform</p>
+        <h1 class="mt-2 text-3xl font-black text-white">SolarIQ</h1>
+        <p class="mt-2 text-sm text-slate-400"><%= mode === 'signup' ? 'Create your admin access before opening the dashboard.' : 'Sign in to open the SolarIQ dashboard.' %></p>
+      </div>
+
+      <% if (error) { %>
+        <div class="mb-4 rounded-2xl border border-rose-400/40 bg-rose-500/10 p-3 text-sm text-rose-200"><%= error %></div>
+      <% } %>
+
+      <form method="post" action="/<%= mode %>" class="grid gap-4">
+        <% if (mode === 'signup') { %>
+          <label class="text-sm font-semibold text-slate-300">Full Name
+            <input name="name" required class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white outline-none focus:border-cyan-400">
+          </label>
+          <label class="text-sm font-semibold text-slate-300">Organization
+            <input name="organization" value="VVCE" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white outline-none focus:border-cyan-400">
+          </label>
+        <% } %>
+        <label class="text-sm font-semibold text-slate-300">Email
+          <input name="email" type="email" required class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white outline-none focus:border-cyan-400">
+        </label>
+        <label class="text-sm font-semibold text-slate-300">Password
+          <input name="password" type="password" required minlength="6" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white outline-none focus:border-cyan-400">
+        </label>
+        <button class="rounded-2xl bg-cyan-400 px-4 py-3 font-black text-slate-950 hover:bg-cyan-300" type="submit"><%= mode === 'signup' ? 'Create Account' : 'Sign In' %></button>
+      </form>
+
+      <p class="mt-5 text-center text-sm text-slate-400">
+        <% if (mode === 'signup') { %>
+          Already have an account? <a class="font-bold text-cyan-300" href="/signin">Sign in</a>
+        <% } else { %>
+          New here? <a class="font-bold text-cyan-300" href="/signup">Create account</a>
+        <% } %>
+      </p>
+    </section>
+  </main>
+</body>
+</html>

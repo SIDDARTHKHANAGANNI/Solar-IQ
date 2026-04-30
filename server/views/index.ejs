@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= appName %> - <%= pageTitle %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="min-h-screen bg-[#020817] text-slate-100">
+  <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,#0f2a4d_0,#020817_38%,#020817_100%)]">
+    <nav class="border-b border-slate-800 bg-slate-950/85 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <a href="/" class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400 bg-cyan-400/10 text-lg font-black text-cyan-300">SI</span>
+          <span>
+            <span class="block text-xl font-black">SolarIQ</span>
+            <span class="block text-xs font-semibold uppercase text-cyan-300">Solar Intelligence Platform</span>
+          </span>
+        </a>
+        <div class="grid grid-cols-2 gap-2 text-sm md:flex md:flex-wrap">
+          <% const navClass = (key) => page === key ? 'rounded-2xl bg-cyan-400 text-slate-950' : 'rounded-2xl border border-slate-700 bg-slate-900 text-slate-200 hover:border-cyan-400'; %>
+          <a href="/" class="<%= navClass('home') %> px-4 py-2 font-bold">Home</a>
+          <a href="/installation" class="<%= navClass('installation') %> px-4 py-2 font-bold">Setup</a>
+          <a href="/ai-energy" class="<%= navClass('ai-energy') %> px-4 py-2 font-bold">AI Energy</a>
+          <a href="/planning" class="<%= navClass('planning') %> px-4 py-2 font-bold">Planning</a>
+          <a href="/carbon" class="<%= navClass('carbon') %> px-4 py-2 font-bold">Carbon Credits</a>
+          <a href="/admin" class="<%= navClass('admin') %> px-4 py-2 font-bold">Admin</a>
+          <form method="post" action="/logout"><button class="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-2 font-bold text-slate-200 hover:border-rose-400" type="submit">Logout</button></form>
+        </div>
+      </div>
+    </nav>
+
+    <main class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+      <header class="rounded-3xl border border-slate-800 bg-slate-950/70 p-5 shadow-2xl shadow-black/40">
+        <p class="text-sm font-semibold uppercase text-cyan-300"><%= pageTitle %></p>
+        <h1 class="mt-1 text-3xl font-black text-white md:text-4xl">
+          <% if (page === 'home') { %>Real-Time Monitoring & AI Prediction<% } %>
+          <% if (page === 'installation') { %>Installation Setup<% } %>
+          <% if (page === 'ai-energy') { %>AI Energy Generation Estimation<% } %>
+          <% if (page === 'planning') { %>Pre-Installation Planning<% } %>
+          <% if (page === 'carbon') { %>Carbon Credit Generation & Revenue<% } %>
+          <% if (page === 'admin') { %>Admin Profile<% } %>
+        </h1>
+        <p class="mt-2 max-w-3xl text-sm text-slate-400">
+          <% if (page === 'home') { %>NASA POWER date ranges drive monitoring and predictive solar values, with load estimates for demand.<% } %>
+          <% if (page === 'installation') { %>Enter your solar installation details to personalize your dashboard experience.<% } %>
+          <% if (page === 'ai-energy') { %>Enter basic site details and use NASA POWER solar resource data for generation estimates.<% } %>
+          <% if (page === 'planning') { %>Scan nearby coordinate points with NASA POWER to recommend the strongest sunlight area for panel placement.<% } %>
+          <% if (page === 'carbon') { %>Calculate CO2e reduction, carbon credits, estimated credit value, and revenue for a selected date range.<% } %>
+          <% if (page === 'admin') { %>Manage project, equipment, API, and signed-in user details for this SolarIQ deployment.<% } %>
+        </p>
+      </header>
+
+      <% if (page === 'home') { %>
+        <section class="grid gap-4 md:grid-cols-4">
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Total Solar Generated</p><p id="solarMetric" class="mt-2 text-3xl font-black text-cyan-300">-- kWh</p></article>
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Total Load Demand</p><p id="loadMetric" class="mt-2 text-3xl font-black text-rose-300">-- kWh</p></article>
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Solar Energy Consumed</p><p id="netMetric" class="mt-2 text-3xl font-black text-blue-300">-- kWh</p></article>
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Data Source</p><p id="dataMode" class="mt-2 text-xl font-black text-white">NASA POWER</p></article>
+        </section>
+
+        <section class="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4">
+            <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div><h2 class="text-lg font-bold">Real-Time Monitoring System</h2><p class="text-xs uppercase text-slate-400">NASA POWER historical date range</p></div>
+              <form id="monitoringRangeForm" class="grid gap-2 text-sm sm:grid-cols-3">
+                <input name="startDate" type="date" class="rounded-2xl border border-slate-700 bg-slate-900 p-2 text-white">
+                <input name="endDate" type="date" class="rounded-2xl border border-slate-700 bg-slate-900 p-2 text-white">
+                <button class="rounded-2xl bg-cyan-400 px-4 py-2 font-bold text-slate-950" type="submit">Apply</button>
+              </form>
+            </div>
+<div class="h-80"><canvas id="monitoringChart"></canvas></div>
+            <div id="monitoringSavings" class="mt-4 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-3 text-sm font-bold text-emerald-200">Select a range to calculate savings.</div>
+          </div>
+
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4">
+            <h2 class="text-lg font-bold">Today Summary</h2>
+            <div class="mt-4 grid gap-3 text-sm">
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Peak Current</p><p id="peakCurrent" class="text-2xl font-black text-cyan-300">-- A</p></div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Peak Voltage</p><p id="peakVoltage" class="text-2xl font-black text-blue-300">-- V</p></div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Solar Energy Generated Today</p><p id="todaySolar" class="text-2xl font-black text-cyan-300">-- kWh</p></div>
+<div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Load Demand Today</p><p id="todayLoad" class="text-2xl font-black text-rose-300">-- kWh</p><p id="todayBasis" class="mt-1 text-xs text-slate-500"></p></div>
+<div id="energyNotification" class="rounded-2xl border-2 border-amber-400 bg-amber-400/5 p-3">
+                <h4 class="text-xs font-bold uppercase text-amber-400 mb-2">Notifications</h4>
+                <p class="text-sm text-amber-200" id="energyNotificationText"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4">
+            <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div><h2 class="text-lg font-bold">Future AI Predictive System</h2><p id="aiSource" class="text-xs uppercase text-slate-400">NASA POWER seasonal AI</p></div>
+              <form id="predictiveRangeForm" class="grid gap-2 text-sm sm:grid-cols-3">
+                <input name="startDate" type="date" class="rounded-2xl border border-slate-700 bg-slate-900 p-2 text-white">
+                <input name="endDate" type="date" class="rounded-2xl border border-slate-700 bg-slate-900 p-2 text-white">
+                <button class="rounded-2xl bg-cyan-400 px-4 py-2 font-bold text-slate-950" type="submit">Predict</button>
+              </form>
+            </div>
+<div class="h-80"><canvas id="forecastChart"></canvas></div>
+<div id="forecastNotification" class="mt-4 rounded-2xl border-2 border-amber-400 bg-amber-400/5 p-3">
+              <h4 class="text-xs font-bold uppercase text-amber-400 mb-2">Notifications</h4>
+              <p class="text-sm text-amber-200" id="forecastNotificationText"></p>
+            </div>
+          </div>
+
+          <form id="predictiveAnalysisForm" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4">
+            <h2 class="text-lg font-bold">Predictive Analysis</h2>
+            <div class="mt-4 grid gap-3 text-sm">
+              <label class="text-slate-300">Location Type
+                <select name="locationType" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-2 text-white">
+                  <option value="house" data-tariff="5.8">House - Rs 5.80/kWh</option>
+                  <option value="institutions" data-tariff="6.3" selected>Institutions - Rs 6.30/kWh</option>
+                  <option value="industries" data-tariff="7.5">Industries - Rs 7.50/kWh</option>
+                </select>
+              </label>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Electrical Energy</p><p id="paElectrical" class="text-2xl font-black text-rose-300">-- kWh</p></div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Solar Energy Consumed</p><p id="paSolarConsumed" class="text-2xl font-black text-cyan-300">-- kWh</p></div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-3"><p class="text-slate-400">Estimated Savings</p><p id="paSavings" class="text-2xl font-black text-emerald-300">--</p></div>
+            </div>
+          </form>
+        </section>
+      <% } %>
+
+      <% if (page === 'ai-energy') { %>
+        <section class="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+          <form id="aiEnergyForm" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5">
+            <h2 class="text-lg font-bold">AI Energy Generation Estimation</h2>
+            <div class="mt-4 grid gap-3">
+              <label class="text-sm font-semibold text-slate-300">Latitude <input name="latitude" type="number" step="0.0001" value="12.2958" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Longitude <input name="longitude" type="number" step="0.0001" value="76.6394" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Installed Capacity (kW) <input name="capacityKw" type="number" step="0.01" value="170" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Sun Hours <input name="sunHours" type="number" step="0.01" value="6" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Performance Ratio <input name="performanceRatio" type="number" step="0.01" value="0.75" readonly class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-800 p-3 text-slate-300"></label>
+              <button class="rounded-2xl bg-cyan-400 px-4 py-3 font-bold text-slate-950" type="submit">Estimate With NASA POWER</button>
+            </div>
+          </form>
+          <div id="aiEnergyResult" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5 text-sm text-slate-200">Submit site details to estimate solar generation from NASA POWER and Open-Meteo data.</div>
+        </section>
+      <% } %>
+
+      <% if (page === 'planning') { %>
+        <section class="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+          <form id="placementForm" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5">
+            <h2 class="text-lg font-bold">Pre-Installation Planning</h2>
+            <div class="mt-4 grid gap-3">
+              <label class="text-sm font-semibold text-slate-300">Latitude <input name="latitude" type="number" step="0.0001" value="12.2958" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Longitude <input name="longitude" type="number" step="0.0001" value="76.6394" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Number of Panels <input name="numberOfPanels" type="number" value="650" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Panel Wattage <input name="panelWatt" type="number" value="250" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Available Roof Area (m2) <input name="availableRoofAreaM2" type="number" value="1200" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Panel Area (m2 each) <input name="panelAreaM2" type="number" step="0.01" value="1.65" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Campus Radius (meters) <input name="campusRadiusMeters" type="number" value="500" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Required Electricity in Buildings (optional) <input name="requiredBuildings" type="number" placeholder="Example: 10" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white placeholder:text-slate-500"></label>
+              <label class="text-sm font-semibold text-slate-300">Average Consumption per Building (kWh/day) <input name="averageBuildingConsumptionKwh" type="number" value="30" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <button class="rounded-2xl bg-cyan-400 px-4 py-3 font-bold text-slate-950" type="submit">Find Highest Sunlight Area</button>
+            </div>
+          </form>
+          <div id="placementResult" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5 text-sm text-slate-200">SolarIQ will scan a nearby coordinate grid using NASA POWER and recommend the strongest sunlight area.</div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5 lg:col-span-2">
+            <div class="mb-3 flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-bold">Campus Selector</h2>
+                <p class="text-sm text-slate-400">Use Google Maps to identify the campus center, then adjust latitude/longitude above; recommendations stay inside the selected campus radius.</p>
+              </div>
+              <span class="rounded-2xl border border-cyan-400 px-3 py-2 text-sm font-bold text-cyan-300">Google Maps</span>
+            </div>
+            <iframe id="campusMap" class="h-96 w-full rounded-3xl border border-slate-800" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a id="googleMapsLink" class="mt-3 inline-flex rounded-2xl border border-cyan-400 px-4 py-2 text-sm font-bold text-cyan-300" target="_blank" rel="noreferrer">Open selected campus in Google Maps</a>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (page === 'carbon') { %>
+        <section class="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+          <form id="carbonForm" class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5">
+            <h2 class="text-lg font-bold">Carbon Credits Date Range</h2>
+            <div class="mt-4 grid gap-3">
+              <label class="text-sm font-semibold text-slate-300">Start Date <input name="startDate" type="date" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">End Date <input name="endDate" type="date" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Latitude <input name="latitude" type="number" step="0.0001" value="12.2958" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Longitude <input name="longitude" type="number" step="0.0001" value="76.6394" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Installed Capacity (kW) <input name="capacityKw" type="number" value="170" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <label class="text-sm font-semibold text-slate-300">Electricity Tariff per kWh <input name="tariffPerKwh" type="number" step="0.01" value="6.30" class="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-900 p-3 text-white"></label>
+              <button class="rounded-2xl bg-cyan-400 px-4 py-3 font-bold text-slate-950" type="submit">Calculate Credits</button>
+            </div>
+          </form>
+          <div class="grid gap-4 md:grid-cols-2">
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Solar Electricity Provided</p><p id="carbonSolar" class="mt-2 text-3xl font-black text-cyan-300">-- kWh</p></article>
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">CO2e Reduced</p><p id="carbonCo2" class="mt-2 text-3xl font-black text-blue-300">-- kg</p></article>
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Estimated Potential Carbon Credits</p><p id="carbonCredits" class="mt-2 text-3xl font-black text-white">--</p></article>
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4"><p class="text-sm text-slate-400">Utilized Solar Energy</p><p id="carbonUtilized" class="mt-2 text-3xl font-black text-emerald-300">-- kWh</p></article>
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4 md:col-span-2"><p class="text-sm text-slate-400">Total Revenue / Savings</p><p id="amountSaved" class="mt-2 text-3xl font-black text-emerald-300">--</p></article>
+            <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-4 md:col-span-2"><p class="text-sm text-slate-400">Verification Note</p><p id="carbonNote" class="mt-2 text-sm font-bold text-slate-200">Actual carbon credits require certification under standards like Verra or Gold Standard.</p></article>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (page === 'admin') { %>
+        <section class="grid gap-5 lg:grid-cols-3">
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5"><h2 class="text-lg font-bold text-cyan-300">Signed In</h2><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-slate-400">Name</dt><dd class="font-bold"><%= user.name %></dd></div><div><dt class="text-slate-400">Email</dt><dd class="font-bold"><%= user.email %></dd></div><div><dt class="text-slate-400">Organization</dt><dd class="font-bold"><%= user.organization %></dd></div></dl></article>
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5"><h2 class="text-lg font-bold text-cyan-300">Project</h2><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-slate-400">Site</dt><dd class="font-bold">VVCE A, B, C and D Block Solar</dd></div><div><dt class="text-slate-400">System Capacity</dt><dd class="font-bold">170 kWp SRTPV</dd></div><div><dt class="text-slate-400">Dataset</dt><dd class="font-bold">VVCE monthly EB and solar kWh</dd></div></dl></article>
+          <article class="rounded-3xl border border-slate-800 bg-slate-950/75 p-5"><h2 class="text-lg font-bold text-cyan-300">APIs</h2><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-slate-400">NASA POWER</dt><dd class="font-bold">Solar resource and historical date ranges</dd></div><div><dt class="text-slate-400">Open-Meteo</dt><dd class="font-bold">Near-real-time irradiance/weather</dd></div><div><dt class="text-slate-400">Flask AI</dt><dd class="font-bold"><%= aiUrl %></dd></div></dl></article>
+        </section>
+      <% } %>
+    </main>
+  </div>
+
+  <script>
+    window.SOLAR_IQ = { aiUrl: "<%= aiUrl %>", page: "<%= page %>" };
+  </script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
