@@ -1,7 +1,8 @@
 # SolarIQ - Solar Intelligence Platform
 
-SolarIQ is a full-stack AI-powered solar intelligence dashboard built with EJS, Tailwind CSS, Chart.js, Express.js, and a Python Flask forecasting API.
-
+SolarIQ is an AI-powered dashboard that analyzes solar energy generation, consumption, and efficiency for institutions , industries.etc.
+It provides insights on cost savings, carbon emission reduction, and optimal energy utilization using real-time and historical data.
+The system also leverages AI to predict sunlight availability and improve solar energy planning across campuses.
 ## Project Structure
 
 ```text
